@@ -1,6 +1,6 @@
 {
   "name": "fs-extended-remote",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "module that has extended all fs methods over an api call for remote server.",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,6 @@
   "dependencies": {
     "deasync": "0.1.24",
     "request": "2.88.2"
-  }
+  },
   "homepage": "https://github.com/darshit-shah/fs-extended-remote#readme"
 }
