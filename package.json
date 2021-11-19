@@ -1,0 +1,19 @@
+{
+  "name": "fs-extended-remote",
+  "version": "1.0.0",
+  "description": "module that has extended all fs methods over an api call for remote server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darshit-shah/fs-extended-remote.git"
+  },
+  "author": "darshit.shah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darshit-shah/fs-extended-remote/issues"
+  },
+  "homepage": "https://github.com/darshit-shah/fs-extended-remote#readme"
+}
