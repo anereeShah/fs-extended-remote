@@ -1,6 +1,6 @@
 {
   "name": "fs-extended-remote",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "module that has extended all fs methods over an api call for remote server.",
   "main": "index.js",
   "scripts": {
