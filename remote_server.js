@@ -17,8 +17,8 @@ function vm(apiEndPoint = "http://localhost:3001/") {
           cb(e, null);
         }
         let res = JSON.parse(body);
-        if(url === "stat"){
-           res.data= new Stats(res.data)
+        if (url === "stat") {
+          res.data = new Stats(res.data);
         }
         if (e) {
           cb(e, null);
@@ -38,24 +38,26 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       cb
     );
   }
-  function readdir(fileName, cb) {
+  function readdir(fileName, options, cb) {
     callToServer(
       "readdir",
       {
         path: fileName,
+        options,
       },
       cb
     );
   }
-  function mkdir(fileName, cb) {
-    callToServer("mkdir", { path: fileName }, cb);
+  function mkdir(fileName, options, cb) {
+    callToServer("mkdir", { path: fileName, options }, cb);
   }
-  function writeFile(path, data, cb) {
+  function writeFile(path, data, options, cb) {
     callToServer(
       "writeFile",
       {
         path: path,
-        data: data
+        data: data,
+        options,
       },
       cb
     );
@@ -79,17 +81,17 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       }
     );
   }
-  function rmdir(path) {
+  function rmdir(path, options, cb) {
     request.post(
       {
         headers: {
           "content-type": "application/json",
         },
         url: apiEndPoint + "rmdir",
-        body: JSON.stringify({ path: path }),
+        body: JSON.stringify({ path, options }),
       },
       (e, response, body) => {
-        console.error(e);
+        cb(e);
       }
     );
   }
@@ -103,7 +105,7 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       cb
     );
   }
-  function stat(path, cb) {
+  function stat(path, options, cb) {
     request.post(
       {
         headers: {
@@ -111,7 +113,8 @@ function vm(apiEndPoint = "http://localhost:3001/") {
         },
         url: apiEndPoint + "stat",
         body: JSON.stringify({
-          path: path,
+          path,
+          options,
         }),
       },
       (e, response, body) => {
@@ -127,28 +130,14 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       }
     );
   }
-  function lstat(path, cb) {
-    request.post(
+  function lstat(path, options, cb) {
+    callToServer(
+      "lstat",
       {
-        headers: {
-          "content-type": "application/json",
-        },
-        url: apiEndPoint + "lstat",
-        body: JSON.stringify({
-          path: path,
-        }),
+        path,
+        options,
       },
-      (e, response, body) => {
-        if (e) {
-          cb(e, null);
-        }
-        let res = JSON.parse(body);
-        if (e) {
-          cb(e, null);
-        } else {
-          cb(null, new Stats(res.data));
-        }
-      }
+      cb
     );
   }
   function ensureDir(path, cb) {
@@ -160,48 +149,36 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       cb
     );
   }
-  function appendFile(path, data, cb) {
+  function appendFile(path, data, options, cb) {
     callToServer(
       "appendFile",
       {
         path: path,
         data: data,
+        options,
       },
       cb
     );
   }
-  function open(path, flags, cb) {
+  function open(path, flags, mode, cb) {
     callToServer(
       "open",
       {
-        path: path,
-        flags: flags,
+        path,
+        flags,
+        mode,
       },
       cb
     );
   }
-  function fstat(fd, cb) {
-    request.post(
+  function fstat(fd, options, cb) {
+    callToServer(
+      "fstat",
       {
-        headers: {
-          "content-type": "application/json",
-        },
-        url: apiEndPoint + "stat",
-        body: JSON.stringify({
-          fd,
-        }),
+        fd,
+        options,
       },
-      (e, response, body) => {
-        if (e) {
-          cb(e, null);
-        }
-        let res = JSON.parse(body);
-        if (e) {
-          cb(e, null);
-        } else {
-          cb(null, new Stats(res.data));
-        }
-      }
+      cb
     );
   }
   function read(fd, buffer, offset, length, position, cb) {
@@ -242,21 +219,23 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       cb
     );
   }
-  function access(path, cb) {
+  function access(path, mode, cb) {
     callToServer(
       "access",
       {
-        path: path,
+        path,
+        mode,
       },
       cb
     );
   }
-  function copyFile(src, dest, cb) {
+  function copyFile(src, dest, mode, cb) {
     callToServer(
       "copyFile",
       {
         src,
         dest,
+        mode,
       },
       cb
     );
@@ -310,7 +289,7 @@ function vm(apiEndPoint = "http://localhost:3001/") {
         if (res.status) {
           const writableStream = new Writable();
           writableStream._write = (chunk, encoding, next) => {
-            writeFile(path, chunk.toString(), encoding, () => {
+            writeFile(path, chunk.toString(), options, () => {
               next();
             });
           };
