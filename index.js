@@ -2,8 +2,17 @@ const deasync = require("deasync");
 const fsConnector = require("./identify");
 function externalFs(stringObj) {
   let constant = stringObj ? JSON.parse(stringObj) : {};
-  function readFile(path, options, cb) {
+  function segregateArgumentsAndCb(arguments) {
+    let args = [...arguments];
+    let cb = args.pop();
+    if (typeof cb !== "function") {
+      throw "Callback is not a function";
+    }
+    return [cb, args];
+  }
+  function readFile(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
       connection.readFile(path, options, (err, data) => {
         cb(err, data);
@@ -13,10 +22,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function writeFile(path, detailsToWrite, cb) {
+  function writeFile(...arguments) {
     try {
+      let [cb,[path, data, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.writeFile(path, detailsToWrite, (err, data) => {
+      connection.writeFile(path, data, options, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
@@ -24,10 +34,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function readdir(path, cb) {
+  function readdir(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.readdir(path, (e, res) => {
+      connection.readdir(path, options, (e, res) => {
         cb(e, res);
       });
     } catch (e) {
@@ -35,10 +46,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function mkdir(path, cb) {
+  function mkdir(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.mkdir(path, (e, res) => {
+      connection.mkdir(path, options, (e, res) => {
         cb(e, res);
       });
     } catch (e) {
@@ -46,10 +58,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function appendFile(path, detailsToWrite, cb) {
+  function appendFile(...arguments) {
     try {
+      let [cb,[path, detailsToWrite, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.appendFile(path, detailsToWrite, (err, data) => {
+      connection.appendFile(path, detailsToWrite, options, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
@@ -79,10 +92,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function stat(path, cb) {
+  function stat(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.stat(path, (e, res) => {
+      connection.stat(path, options, (e, res) => {
         cb(e, res);
       });
     } catch (e) {
@@ -98,18 +112,22 @@ function externalFs(stringObj) {
       console.error(e);
     }
   }
-  function rmdir(path) {
+  function rmdir(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      return connection.rmdir(path);
+      return connection.rmdir(path, options, (e) => {
+        cb(e);
+      });
     } catch (e) {
       console.error(e);
     }
   }
-  function lstat(path) {
+  function lstat(...arguments) {
     try {
+      let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.lstat(path, (e, res) => {
+      connection.lstat(path, options, (e, res) => {
         cb(e, res);
       });
     } catch (e) {
@@ -136,10 +154,11 @@ function externalFs(stringObj) {
       return e;
     }
   }
-  function open(path, flags, cb) {
+  function open(...arguments) {
     try {
+      let [cb,[path, flags, mode]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.open(path, flags, (err, data) => {
+      connection.open(path, flags, mode, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
@@ -147,10 +166,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function fstat(fd, cb) {
+  function fstat(...arguments) {
     try {
+      let [cb,[fd, options]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.fstat(fd, (err, data) => {
+      connection.fstat(fd, options, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
@@ -158,8 +178,9 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function read(fd, buffer, offset, length, position, cb) {
+  function read(...arguments) {
     try {
+      let [cb,[fd, buffer, offset, length, position]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
       connection.read(fd, buffer, offset, length, position, (err, data) => {
         cb(err, data);
@@ -180,10 +201,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function access(path, cb) {
+  function access(...arguments) {
     try {
+      let [cb,[path, mode]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.access(path, (err, data) => {
+      connection.access(path, mode, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
@@ -191,10 +213,11 @@ function externalFs(stringObj) {
       cb(e, null);
     }
   }
-  function copyFile(src, dest, cb) {
+  function copyFile(...arguments) {
     try {
+      let [cb,[src, dest, mode]] = segregateArgumentsAndCb(arguments);
       const connection = fsConnector.identify(constant);
-      connection.copyFile(src, dest, (err, data) => {
+      connection.copyFile(src, dest, mode, (err, data) => {
         cb(err, data);
       });
     } catch (e) {
