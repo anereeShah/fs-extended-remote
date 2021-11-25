@@ -17,13 +17,14 @@ function vm(apiEndPoint = "http://localhost:3001/") {
           cb(e, null);
         }
         let res = JSON.parse(body);
-        if (url === "stat") {
-          res.data = new Stats(res.data);
-        }
         if (e) {
           cb(e, null);
         } else {
-          cb(null, res.data);
+          if (res.status) {
+            cb(null, res.data);
+          } else {
+            cb(res.error, null);
+          }
         }
       }
     );
@@ -76,7 +77,7 @@ function vm(apiEndPoint = "http://localhost:3001/") {
         if (e) {
           cb(e);
         } else {
-          cb(res.data);
+          cb(res.error || res.data);
         }
       }
     );
@@ -125,7 +126,11 @@ function vm(apiEndPoint = "http://localhost:3001/") {
         if (e) {
           cb(e, null);
         } else {
-          cb(null, new Stats(res.data));
+          if (res.status === true) {
+            cb(null, new Stats(res.data));
+          } else {
+            cb(res.error);
+          }
         }
       }
     );
@@ -204,7 +209,11 @@ function vm(apiEndPoint = "http://localhost:3001/") {
         if (e) {
           cb(e, null);
         } else {
-          cb(null, res.bytesRead, res.buffer);
+          if (res.status === true) {
+            cb(null, res.bytesRead, res.buffer);
+          } else {
+            cb(res.error);
+          }
         }
       }
     );
