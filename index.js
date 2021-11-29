@@ -249,28 +249,23 @@ function externalFs(stringObj) {
 
   /////////////////////////////////////////////////// sync Methods ///////////////////////////////////
 
-  function readFileSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function readFileSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.readFileSync(path, options);
   }
-  function writeFileSync(...arguments) {
-    let [cb,[path, data, options]] = segregateArgumentsAndCb(arguments);
+  function writeFileSync(path, data, options) {
     const connection = fsConnector.identify(constant);
     return connection.writeFileSync(path, data, options);
   }
-  function readdirSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function readdirSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.readdirSync(path, options);
   }
-  function mkdirSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function mkdirSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.mkdirSync(path, options);
   }
-  function appendFileSync(...arguments) {
-    let [cb,[path, detailsToWrite, options]] = segregateArgumentsAndCb(arguments);
+  function appendFileSync(path, detailsToWrite, options) {
     const connection = fsConnector.identify(constant);
     return connection.appendFileSync(path, detailsToWrite, options);
   }
@@ -282,8 +277,7 @@ function externalFs(stringObj) {
     const connection = fsConnector.identify(constant);
     return connection.unlinkSync(path);
   }
-  function statSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function statSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.statSync(path, options);
   }
@@ -291,29 +285,24 @@ function externalFs(stringObj) {
     const connection = fsConnector.identify(constant);
     return connection.ensureDirSync(path);
   }
-  function rmdirSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function rmdirSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.rmdirSync(path, options);
   }
-  function lstatSync(...arguments) {
-    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+  function lstatSync(path, options) {
     const connection = fsConnector.identify(constant);
     return connection.lstatSync(path, options);
   }
 
-  function openSync(...arguments) {
-    let [cb,[path, flags, mode]] = segregateArgumentsAndCb(arguments);
+  function openSync(path, flags, mode) {
     const connection = fsConnector.identify(constant);
     return connection.openSync(path, flags, mode);
   }
-  function fstatSync(...arguments) {
-    let [cb,[fd, options]] = segregateArgumentsAndCb(arguments);
+  function fstatSync(fd, options) {
     const connection = fsConnector.identify(constant);
     return connection.fstatSync(fd, options);
   }
-  function readSync(...arguments) {
-    let [cb,[fd, buffer, offset, length, position]] = segregateArgumentsAndCb(arguments);
+  function readSync(fd, buffer, offset, length, position) {
     const connection = fsConnector.identify(constant);
     return connection.readSync(fd, buffer, offset, length, position);
   }
@@ -321,17 +310,15 @@ function externalFs(stringObj) {
     const connection = fsConnector.identify(constant);
     return connection.renameSync(oldpath, newpath);
   }
-  function accessSync(...arguments) {
-    let [cb,[path, mode]] = segregateArgumentsAndCb(arguments);
+  function accessSync(path, mode) {
     const connection = fsConnector.identify(constant);
     return connection.accessSync(path, mode);
   }
-  function copyFileSync(...arguments) {
-    let [cb,[src, dest, mode]] = segregateArgumentsAndCb(arguments);
+  function copyFileSync(src, dest, mode) {
     const connection = fsConnector.identify(constant);
     return connection.copyFileSync(src, dest, mode);
   }
-  function closeSync(fd, cb) {
+  function closeSync(fd) {
     const connection = fsConnector.identify(constant);
     return connection.closeSync(fd);
   }
