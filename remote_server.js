@@ -342,28 +342,66 @@ function vm(apiEndPoint = "http://localhost:3001/") {
       }
     );
   }
+
+  const readFileSync = deasync(readFile);
+  const existsSync = deasync(exists);
+  const mkdirSync = deasync(mkdir);
+  const writeFileSync = deasync(writeFile);
+  const appendFileSync = deasync(appendFile);
+  const unlinkSync = deasync(unlink);
+  const statSync = deasync(stat);
+  const ensureDirSync = deasync(ensureDir);
+  const readdirSync = deasync(readdir);
+  const rmdirSync = deasync(rmdir);
+  const lstatSync = deasync(lstat);
+  const openSync = deasync(open);
+  const fstatSync = deasync(fstat);
+  const readSync = deasync(read);
+  const closeSync = deasync(close);
+  const renameSync = deasync(rename);
+  const accessSync = deasync(access);
+  const copyFileSync = deasync(copyFile);
+
   return {
     readFile,
-    readdir,
+    readFileSync,
     mkdir,
-    ensureDir,
-    mkdirp,
-    writeFile,
-    appendFile,
+    mkdirSync,
+    readdir,
+    readdirSync,
     exists,
-    unlink,
+    existsSync,
     stat,
+    statSync,
+    ensureDir,
+    ensureDirSync,
+    writeFile,
+    writeFileSync,
+    unlink,
+    unlinkSync,
+    appendFile,
+    appendFileSync,
     rmdir,
+    rmdirSync,
     lstat,
+    lstatSync,
+    open,
+    openSync,
+    fstat,
+    fstatSync,
+    read,
+    readSync,
+    close,
+    closeSync,
+    rename,
+    renameSync,
+    access,
+    accessSync,
+    copyFile,
+    copyFileSync,
+    mkdirp,
     createWriteStream,
     createReadStream,
-    open,
-    fstat,
-    read,
-    rename,
-    access,
-    copyFile,
-    close,
   };
 }
 module.exports = vm;

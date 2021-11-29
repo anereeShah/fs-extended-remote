@@ -1,4 +1,3 @@
-const deasync = require("deasync");
 const fsConnector = require("./identify");
 function externalFs(stringObj) {
   let constant = stringObj ? JSON.parse(stringObj) : {};
@@ -246,50 +245,138 @@ function externalFs(stringObj) {
       console.error(e);
     }
   }
-  const readFileSync = deasync(readFile);
-  const existsSync = deasync(exists);
-  const mkdirSync = deasync(mkdir);
-  const writeFileSync = deasync(writeFile);
-  const appendFileSync = deasync(appendFile);
-  const unlinkSync = deasync(unlink);
-  const statSync = deasync(stat);
-  const ensureDirSync = deasync(ensureDir);
-  const readdirSync = deasync(readdir);
-  const rmdirSync = deasync(rmdir);
-  const lstatSync = deasync(lstat);
-  const openSync = deasync(open);
-  const fstatSync = deasync(fstat);
-  const readSync = deasync(read);
-  const closeSync = deasync(close);
-  const renameSync = deasync(rename);
-  const accessSync = deasync(access);
-  const copyFileSync = deasync(copyFile);
+
+
+  /////////////////////////////////////////////////// sync Methods ///////////////////////////////////
+
+  function readFileSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.readFileSync(path, options);
+  }
+  function writeFileSync(...arguments) {
+    let [cb,[path, data, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.writeFileSync(path, data, options);
+  }
+  function readdirSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.readdirSync(path, options);
+  }
+  function mkdirSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.mkdirSync(path, options);
+  }
+  function appendFileSync(...arguments) {
+    let [cb,[path, detailsToWrite, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.appendFileSync(path, detailsToWrite, options);
+  }
+  function existsSync(path) {
+    const connection = fsConnector.identify(constant);
+    return connection.existsSync(path);
+  }
+  function unlinkSync(path) {
+    const connection = fsConnector.identify(constant);
+    return connection.unlinkSync(path);
+  }
+  function statSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.statSync(path, options);
+  }
+  function ensureDirSync(path) {
+    const connection = fsConnector.identify(constant);
+    return connection.ensureDirSync(path);
+  }
+  function rmdirSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.rmdirSync(path, options);
+  }
+  function lstatSync(...arguments) {
+    let [cb,[path, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.lstatSync(path, options);
+  }
+
+  function openSync(...arguments) {
+    let [cb,[path, flags, mode]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.openSync(path, flags, mode);
+  }
+  function fstatSync(...arguments) {
+    let [cb,[fd, options]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.fstatSync(fd, options);
+  }
+  function readSync(...arguments) {
+    let [cb,[fd, buffer, offset, length, position]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.readSync(fd, buffer, offset, length, position);
+  }
+  function renameSync(oldpath, newpath) {
+    const connection = fsConnector.identify(constant);
+    return connection.renameSync(oldpath, newpath);
+  }
+  function accessSync(...arguments) {
+    let [cb,[path, mode]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.accessSync(path, mode);
+  }
+  function copyFileSync(...arguments) {
+    let [cb,[src, dest, mode]] = segregateArgumentsAndCb(arguments);
+    const connection = fsConnector.identify(constant);
+    return connection.copyFileSync(src, dest, mode);
+  }
+  function closeSync(fd, cb) {
+    const connection = fsConnector.identify(constant);
+    return connection.closeSync(fd);
+  }
+
+  // const readFileSync = deasync(readFile);
+  // const existsSync = deasync(exists);
+  // const mkdirSync = deasync(mkdir);
+  // const writeFileSync = deasync(writeFile);
+  // const appendFileSync = deasync(appendFile);
+  // const unlinkSync = deasync(unlink);
+  // const statSync = deasync(stat);
+  // const ensureDirSync = deasync(ensureDir);
+  // const readdirSync = deasync(readdir);
+  // const rmdirSync = deasync(rmdir);
+  // const lstatSync = deasync(lstat);
+  // const openSync = deasync(open);
+  // const fstatSync = deasync(fstat);
+  // const readSync = deasync(read);
+  // const closeSync = deasync(close);
+  // const renameSync = deasync(rename);
+  // const accessSync = deasync(access);
+  // const copyFileSync = deasync(copyFile);
   return {
     readFile,
-    readFile,
+    readFileSync,
+    mkdir,
     mkdirSync,
     readdir,
     readdirSync,
+    exists,
     existsSync,
+    stat,
     statSync,
-    readFileSync,
-    writeFileSync,
     ensureDir,
     ensureDirSync,
-    mkdirp,
     writeFile,
+    writeFileSync,
+    unlink,
     unlinkSync,
     appendFile,
     appendFileSync,
-    exists,
-    unlink,
-    stat,
     rmdir,
     rmdirSync,
     lstat,
     lstatSync,
-    createWriteStream,
-    createReadStream,
     open,
     openSync,
     fstat,
@@ -302,9 +389,11 @@ function externalFs(stringObj) {
     renameSync,
     access,
     accessSync,
-    mkdir,
     copyFile,
     copyFileSync,
+    mkdirp,
+    createWriteStream,
+    createReadStream,
   };
 }
 //async
