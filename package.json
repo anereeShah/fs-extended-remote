@@ -16,7 +16,7 @@
     "url": "https://github.com/darshit-shah/fs-extended-remote/issues"
   },
   "dependencies": {
-    "deasync": "0.1.24",
+    "deasync": "0.1.28",
     "request": "2.88.2"
   },
   "homepage": "https://github.com/darshit-shah/fs-extended-remote#readme"
